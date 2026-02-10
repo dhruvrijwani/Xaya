@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xaya - Monthly Performance Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .metrics-table {
+            width: 100%;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .metrics-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .metrics-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metrics-table td {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .metrics-table td:last-child {
+            border-right: none;
+        }
+
+        .comparison-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .period-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .period-card h3 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .period-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .period-metric:last-child {
+            border-bottom: none;
+        }
+
+        .period-metric-label {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .period-metric-value {
+            color: #333;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .insights-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 30px;
+        }
+
+        .insights-box h3 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .insight-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .insight-item:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .creative-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .creative-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .creative-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .creative-title {
+            color: #667eea;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        <!-- .creative-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 500;
+        } -->
+
+        .creative-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .creative-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .creative-metric-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .creative-metric-value {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .metrics-table {
+                overflow-x: auto;
+            }
+
+            .metrics-table th,
+            .metrics-table td {
+                padding: 15px 10px;
+                font-size: 12px;
+            }
+
+            .metrics-table td {
+                font-size: 18px;
+            }
+
+            .comparison-section {
+                grid-template-columns: 1fr;
+            }
+
+            .creative-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .creative-image-placeholder {
+        width: 100%;
+        height: 220px;              /* adjust based on your design */
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f5f5f5;        /* fallback while image loads */
+        }
+
+        .creative-image-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;          /* keeps image clean & cropped */
+        display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Xaya</h1>
+            <p>Monthly Performance Report - January 2026</p>
+        </div>
+
+        <div class="content">
+            <!-- Overall Performance Section -->
+            <div class="section">
+                <h2 class="section-title">Overall Performance</h2>
+                <div class="metrics-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Amount Spent</th>
+                                <th>Orders</th>
+                                <th>Revenue</th>
+                                <th>ROAS</th>
+                                <th>AOV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>₹168,712</td>
+                                <td>12</td>
+                                <td>₹66,555</td>
+                                <td>0.41</td>
+                                <td>₹5,546</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Period Comparison Section -->
+            <div class="section">
+                <h2 class="section-title">Period Comparison</h2>
+                <div class="comparison-section">
+                    <div class="period-card">
+                        <h3>December 2025 Performance</h3>
+                        <div class="period-metric">
+                            <span class="period-metric-label">Amount Spent</span>
+                            <span class="period-metric-value">₹158,155</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">Orders</span>
+                            <span class="period-metric-value">8</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">Revenue</span>
+                            <span class="period-metric-value">₹64,360</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">ROAS</span>
+                            <span class="period-metric-value">0.41</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">AOV</span>
+                            <span class="period-metric-value">₹8,045</span>
+                        </div>
+                    </div>
+
+                    <div class="period-card">
+                        <h3>January 2026 Performance</h3>
+                        <div class="period-metric">
+                            <span class="period-metric-label">Amount Spent</span>
+                            <span class="period-metric-value">₹168,712</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">Orders</span>
+                            <span class="period-metric-value">12</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">Revenue</span>
+                            <span class="period-metric-value">₹66,555</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">ROAS</span>
+                            <span class="period-metric-value">0.41</span>
+                        </div>
+                        <div class="period-metric">
+                            <span class="period-metric-label">AOV</span>
+                            <span class="period-metric-value">₹5,546</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Insights Section -->
+            <div class="section">
+                <h2 class="section-title">Key Insights & Recommendations</h2>
+                <div class="insights-box">
+                    <div class="insight-item">
+                        Actual spends were 10% lower than planned, primarily due to drop in AOV & Sales.
+                    </div>
+                    <div class="insight-item">
+                        Due to drop in volume for the month of December, prices were brought down in beginning of January to increase order volume and funnel. Result: ATC spiked by 6.5% and order volume increased by 25%.
+                    </div>
+                    <div class="insight-item">
+                        As a retargeting bucket, we are running campaigns for BOF audience like website visitors, ATC and checkouts with dedicated budget of 10% of total budget to stay top of mind.
+                    </div>
+                    <div class="insight-item">
+                        Testing 3-4 creatives per week to find at least 1 winning creative for performance stability. However, CTR for creatives hovered at 0.81% and no clear winner emerged.
+                    </div>
+                    <div class="insight-item">
+                        To improve CTR, continuously discussing with client on influencer content based UGC/videos. This could help drive better CTR and results.
+                    </div>
+                    <div class="insight-item">
+                        Aurora Mermaid Dress was a hero and best seller - most creatives featured it, but this didn't work out even with strong creative face (Niti Mohan).
+                    </div>
+                    <div class="insight-item">
+                        Review-based creatives generally work for this category. Tried reviews and customer word creatives, but CTR was lower and didn't drive results.
+                    </div>
+                    <div class="insight-item">
+                        Catalog has performed decently. Running it with different formats. Mid-Jan started collection ads which showed traction in the 1st week but then declined.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Creative Breakup Section -->
+            <div class="section">
+                <h2 class="section-title">Performance Creative Breakup</h2>
+                <div class="creative-grid">
+                    <div class="creative-card">
+                        <div class="creative-title">Aurora Mermaid Dress (Niti Mohan)</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 1">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹12,404</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.58%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">2</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card">
+                        <div class="creative-title">Part Look You Will Feel (Collection Ad)</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 2">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹15,191</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.7%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">10</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card">
+                        <div class="creative-title">Aurora Mermaid Dress (Static)</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 3">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹9,477</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.72%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">4</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card">
+                        <div class="creative-title">Heidi Offshoulder Midi Dress</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 4">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹14,487</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.67%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">12</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card">
+                        <div class="creative-title">Victoire Flared Dress (Collection Ad)</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 5">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹9,631</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.28%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">5</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card">
+                        <div class="creative-title">Sophie Fit & Flare Dress (Collection Ad)</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 6">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹11,003</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.44%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">13</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creative-card">
+                        <div class="creative-title">Natalia Dress</div>
+                        <div class="creative-image-placeholder">
+                            <img src="images/creative-1.jpg" alt="Ad Creative 7">
+                        </div>
+                        <div class="creative-metrics">
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Spend</span>
+                                <span class="creative-metric-value">₹11,875</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">CTR</span>
+                                <span class="creative-metric-value">0.55%</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">ATC</span>
+                                <span class="creative-metric-value">1</span>
+                            </div>
+                            <div class="creative-metric">
+                                <span class="creative-metric-label">Orders</span>
+                                <span class="creative-metric-value">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Xaya Monthly Performance Report - January 2026</p>
+            <!-- <p>Generated on February 10, 2026</p> -->
+        </div>
+    </div>
+</body
